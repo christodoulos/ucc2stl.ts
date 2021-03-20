@@ -1,5 +1,45 @@
 import { Point } from "./point";
 import { Cuboid } from "./cuboid";
+import * as fs from "fs";
+import * as readline from "readline";
+
+// function csv2list(afile: string, atype: string, prepend_dummy: boolean) {
+function csv2list0(afile: string) {
+  const readInterface = readline.createInterface({
+    input: fs.createReadStream(afile),
+  });
+  const alist: number[][] = [];
+  readInterface.on("line", (line) => {
+    const p: number[] = [];
+    line
+      .trim()
+      .split(",")
+      .forEach((e) => {
+        p.push(parseInt(e));
+      });
+    alist.push(p);
+  });
+  readInterface.on("close", () => {
+    return alist;
+  });
+}
+
+function csv2list(afile: string): number[][] {
+  const data = fs.readFileSync(afile, "utf8");
+  const lines = data.split(/\r?\n/);
+  const alist: number[][] = [];
+  lines.forEach((line) => {
+    const p: number[] = [];
+    line
+      .trim()
+      .split(",")
+      .forEach((e) => {
+        p.push(parseInt(e));
+      });
+    alist.push(p);
+  });
+  return alist;
+}
 
 const cv0 = new Point([0, 0, 0]);
 const cv1 = new Point([1, 0, 0]);
@@ -17,3 +57,6 @@ cu.faces.forEach((face) => {
 });
 
 console.log(cu.faces.get("top"));
+
+const lala = csv2list("Node.txt");
+console.log(lala[0], lala[lala.length]);
