@@ -2,8 +2,8 @@ import { Point } from "./point";
 import { Cuboid } from "./cuboid";
 
 export class CuboidComplex {
-  cuboids = new Map<Point, Cuboid>();
-  vertices = new Map<Point, boolean>();
+  cuboids = new Map<string, Cuboid>();
+  vertices = new Map<string, boolean>();
   triangles: Array<Array<Point>> = [];
   constructor(cuboids: Array<Cuboid>) {
     cuboids.forEach((cuboid) => {
@@ -12,17 +12,17 @@ export class CuboidComplex {
   }
 
   insert(cuboid: Cuboid) {
-    const cuboid_id = cuboid.centroid;
+    const cuboid_id = cuboid.centroid.toString();
     this.cuboids.set(cuboid_id, cuboid);
-    const x = cuboid_id.x;
-    const y = cuboid_id.y;
-    const z = cuboid_id.z;
-    const top_id = new Point([x, y + 1, z]);
-    const bottom_id = new Point([x, y - 1, z]);
-    const west_id = new Point([x - 1, y, z]);
-    const east_id = new Point([x + 1, y, z]);
-    const north_id = new Point([x, y, z - 1]);
-    const south_id = new Point([x, y, z + 1]);
+    const x = cuboid.centroid.x;
+    const y = cuboid.centroid.y;
+    const z = cuboid.centroid.z;
+    const top_id = new Point([x, y + 1, z]).toString();
+    const bottom_id = new Point([x, y - 1, z]).toString();
+    const west_id = new Point([x - 1, y, z]).toString();
+    const east_id = new Point([x + 1, y, z]).toString();
+    const north_id = new Point([x, y, z - 1]).toString();
+    const south_id = new Point([x, y, z + 1]).toString();
     if (this.cuboids.has(top_id)) {
       this.cuboids.get(top_id).faces.get("bottom").outer = false;
       this.cuboids.get(cuboid_id).faces.get("top").outer = false;
@@ -59,7 +59,7 @@ export class CuboidComplex {
           const triangle2 = [v[2], v[3], v[0]];
           this.triangles.push(triangle2);
           v.forEach((vertex) => {
-            this.vertices.set(vertex, true);
+            this.vertices.set(vertex.toString(), true);
           });
         }
       });
